@@ -7,11 +7,17 @@
 
 import Foundation
 
+// Primory API service object to get Rick and Morty data
 final class RMService {
+//     Shared singleton instense
     static let shared = RMService()
     
+//    privatizad constructor
     private init() {}
     
+//    Send RM API Call => Parametrs:
+//    - request: Request instence
+//    - completion: Callback with data or error 
     public func execute(_ request: RMRequest, completion: @escaping () -> Void) {
         
     }
