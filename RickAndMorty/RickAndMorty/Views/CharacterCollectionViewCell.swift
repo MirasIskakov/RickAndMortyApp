@@ -49,9 +49,24 @@ final class CharacterCollectionViewCell: UICollectionViewCell {
     private func addConstraints() {
         
         NSLayoutConstraint.activate([
-        
+            statusLabel.heightAnchor.constraint(equalToConstant: 40),
+            nameLabel.heightAnchor.constraint(equalToConstant: 40),
+            
+            statusLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 5),
+            statusLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -5),
+            nameLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 5),
+            nameLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -5),
+            
+            statusLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -3),
+            nameLabel.bottomAnchor.constraint(equalTo: statusLabel.topAnchor, constant: -3),
+            
+            imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 3),
+            imageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 5),
+            imageView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -5),
+            imageView.bottomAnchor.constraint(equalTo: nameLabel.topAnchor, constant: -3)
+            
         ])
-        
+       
     }
     
     override func prepareForReuse() {
@@ -62,6 +77,20 @@ final class CharacterCollectionViewCell: UICollectionViewCell {
     }
     
     public func configure(with viewModel: CharacterCollectionViewCellViewModel) {
-        
+        nameLabel.text = viewModel.characretName
+        statusLabel.text = viewModel.caracterStatusTaxt
+        viewModel.fetchImage { [weak self] result in
+            switch result {
+            case .success(let data):
+                DispatchQueue.main.async {
+                    let image = UIImage(data: data)
+                    self?.imageView.image = image
+                }
+            case .failure(let error):
+                print(String(describing: error))
+                break
+            }
+            
+        }
     }
 }

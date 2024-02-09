@@ -20,10 +20,10 @@ final class RMService {
         case failedToGetData
     }
     
-//    Send RM API Call => Parametrs:
-//    - request: Request instence
-//    - type: The type of object we expect to get back
-//    - completion: Callback with data or error
+///    Send RM API Call => Parametrs:
+///    - request: Request instence
+///    - type: The type of object we expect to get back
+///    - completion: Callback with data or error
     public func execute<T: Codable>(
         _ request: RMRequest,
         expecting type: T.Type,

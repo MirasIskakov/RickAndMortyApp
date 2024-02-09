@@ -22,7 +22,7 @@ final class RMRequest {
     //    Query parameters for API, if any
     private let queryParameters: [URLQueryItem]
     
-//    Constructed url for the api request in string formst
+///    Constructed url for the api request in string formst
     public var urlString: String {
         var string = Constants.baseURL
         string += "/"
@@ -56,11 +56,11 @@ final class RMRequest {
     
 // MARK: - Public
     
-//    Construct request
-//    - Parameters:
-//      - endPoint: Target endpoint
-//      - pathComponents: Collerction of Path Components
-//      - queryParameters: Collection of Query Parameters
+///    Construct request
+///    - Parameters:
+///      - endPoint: Target endpoint
+///      - pathComponents: Collerction of Path Components
+///      - queryParameters: Collection of Query Parameters
     public init(endPoint: RMEndpoint,
         pathComponents: [String] = [],
         queryParameters: [URLQueryItem] = []
