@@ -7,30 +7,58 @@
 
 import UIKit
 
+protocol CharacterListViewViewModelDelegate: AnyObject {
+    func didLoadInitialCharacter()
+}
+
 final class CharacterListViewViewModel: NSObject {
-    func fatchCharacters() {
-        RMService.shared.execute(.listCharecterRequest,
-                                 expecting: String.self) { result in
+    
+    public weak var deledate: CharacterListViewViewModelDelegate?
+    
+    private var characters: [RMCharacter] = [] {
+        didSet {
+            for character in characters {
+                let viewModel = CharacterCollectionViewCellViewModel(
+                    characretName: character.name,
+                    characretStatus: character.status,
+                    characretImageUrl: URL(string: character.image)
+                )
+                cellViewModels.append(viewModel)
+            }
+        }
+    }
+    
+    private var cellViewModels: [CharacterCollectionViewCellViewModel] = []
+    
+    public func fatchCharacters() {
+        RMService.shared.execute(
+            .listCharecterRequest,
+            expecting: RMGetAllCharactersResponse.self
+        ) { [weak self]result in
             switch result {
-            case .success(let model):
-                print(String(describing: model))
+            case .success(let responseModel):
+                let results = responseModel.results
+                self?.characters = results
+                DispatchQueue.main.async {
+                    self?.deledate?.didLoadInitialCharacter()
+                }
             case .failure(let error):
                 print(String(describing: error))
             }
         }
     }
+}
     
     private func fetchAdditionalCharacter() {
        // isLoadingMoreChatacter = true
     }
-}
 
 extension CharacterListViewViewModel: UICollectionViewDataSource,
                                       UICollectionViewDelegate,
                                       UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        return 20
+        return cellViewModels.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -41,10 +69,7 @@ extension CharacterListViewViewModel: UICollectionViewDataSource,
         ) as? CharacterCollectionViewCell else {
             fatalError("Unsupported cell")
         }
-        let viewModel = CharacterCollectionViewCellViewModel(characretName: "Miras",
-                                                           characretStatus: .alive,
-                                                           characretImageUrl: nil)
-        cell.configure(with: viewModel )
+        cell.configure(with: cellViewModels[indexPath.row])
         return cell
     }
 

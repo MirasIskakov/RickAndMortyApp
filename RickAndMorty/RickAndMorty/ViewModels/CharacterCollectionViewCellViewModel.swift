@@ -24,7 +24,7 @@ final class CharacterCollectionViewCellViewModel {
     }
     
     public var caracterStatusTaxt: String {
-        return characretStatus.rawValue
+        return "Status: \(characretStatus.text)"
     }
     
     public func fetchImage(complition: @escaping (Result<Data, Error> ) -> Void) {
