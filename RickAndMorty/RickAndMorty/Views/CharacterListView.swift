@@ -7,8 +7,17 @@
 
 import UIKit
 
+protocol CharacterListViewDelegate: AnyObject {
+    func rmCharacterListView(
+        _ characretListView: CharacterListView,
+        didSelectCharacter character: RMCharacter
+    )
+}
+
 // View that handles showing list of characters, loader
 final class CharacterListView: UIView {
+    
+    public weak var delegate: CharacterListViewDelegate?
 
     private let viewModel = CharacterListViewViewModel()
     
@@ -22,7 +31,7 @@ final class CharacterListView: UIView {
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 10, right: 10)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isHidden = true
         collectionView.alpha = 0
@@ -75,6 +84,10 @@ final class CharacterListView: UIView {
 
 
 extension CharacterListView: CharacterListViewViewModelDelegate {
+    func didSelectCharacter(_ characret: RMCharacter) {
+        delegate?.rmCharacterListView(self, didSelectCharacter: characret)
+    }
+    
     func didLoadInitialCharacter() {
             spinner.stopAnimating()
             collectionView.isHidden = false
